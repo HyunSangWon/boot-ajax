@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      data-layout-decorate="~{layout/default}">
+	<div class="container-fluid" layout:fragment="content">
+    <script type="text/javascript">
+	$(function() {
+			
+	});
+	
+	function basic_ajax(){
+
+		var email = $("#email").val();
+		var password = $("#password").val();
+		
+		var jsonData = {
+			"email" : email,
+			"password" : password
+		}
+		$.ajax({
+			type: 'POST',
+			contentType: "application/json",
+			url:'/ajax/basic',
+			data: JSON.stringify(jsonData),
+			dataType: 'json',
+			success: function(data){
+				console.log(data);
+			},
+			error:function(xhr,status,error){
+				console.log('error:'+error);
+			}
+		});//end ajax
+	}
+	
+	function image_ajax(){
+		
+		var formData = new FormData();
+		formData.append('img', $('input[type=file]')[0].files[0]);
+		
+		$.ajax({
+			url:'/ajax/upload-img',
+			type: 'POST', 
+			processData: false, // 데이터를 컨텐트 타입에 맞게 변환 여부
+			contentType: false,
+			data: formData,
+			dataType: 'text',
+			success: function(data){
+				if(data == 'success'){
+					alert('업로드 완료');
+					location.reload();
+				}else{
+					alert('업로드 실패');
+				}					
+            },
+            error:function(){
+            	alert('업로드 실패');           
+            }
+		});
+		
+	}
+	
+	function non_async_ajax(){
+		
+		var email = $("#email").val();
+		var password = $("#password").val();
+		
+		var jsonData = {
+			"email" : email,
+			"password" : password
+		}
+		
+		$.ajax({
+			type: 'POST',
+			contentType: "application/json",
+			url:'/ajax/nonAsync',
+			data: JSON.stringify(jsonData),
+			dataType: 'json',
+			async: false,
+			success: function(data){
+				console.log(data);
+			},
+			error:function(xhr,status,error){
+				console.log('error:'+error);
+			}
+		});//end ajax
+	}
+	
+	function text_ajax(){
+		
+		var email = $("#email").val();
+		var password = $("#password").val();
+		
+		var jsonData = {
+			"email" : email,
+			"password" : password
+		}
+		
+		$.ajax({
+			type: 'POST',
+			contentType: "application/json",
+			url:'/ajax/text',
+			data: JSON.stringify(jsonData),
+			dataType: 'text',
+			async: false,
+			success: function(data){
+				console.log(data);
+			},
+			error:function(xhr,status,error){
+				console.log('error:'+error);
+			}
+		});//end ajax
+		
+	}
+    </script>
+	    <!-- Breadcrumbs-->
+	    <ol class="breadcrumb">
+	        <li class="breadcrumb-item">TEST</li>
+	        <li class="breadcrumb-item" style="color: #007bff;">AJAX - TEST</li>
+	    </ol>
+	    <div class="card mb-3">
+	        <div class="card-header">
+	            <i class="fas fa-lock"> 정보입력</i>
+	        </div>
+	        <div class="card-body">
+	            <div class="table-responsive">
+	                    <div class="form-group">
+	                        <label class="control-label col-sm-2" for="email">이메일 :</label>
+	                        <div class="col-md-4">
+	                            <input autocomplete="off" type="text" class="form-control" id="email" name="email">
+	                        </div>
+	                    </div>           
+	                    <div class="form-group">
+	                        <label class="control-label col-sm-2" for="password">비밀번호 :</label>
+	                        <div class="col-md-4">
+	                            <input autocomplete="off" type="password" class="form-control" id="password" name="password">
+	                        </div>
+	                    </div>
+	                    <!--Image-->
+	                    <div class="form-group row">
+						<label for="dept_name" class="col-sm-2 col-form-label"> 이미지  :</label>
+						<div class="col-sm-10">
+						<img style="border: 1px solid; width: 100px; height: auto;" th:src="@{/home/emp/download-img}" alt="싸인 이미지"/>
+							<form id="imgForm" enctype="multipart/form-data">				
+								<input id="imgName" style="width:250px; margin: 20px 0 0 0;" type="file" name="img">
+								<button class="btn btn-warning" type="button" onclick="image_ajax()">이미지 변경</button>
+							</form>
+						</div>			
+						</div>
+	                    <!--Submit -->
+	                    <div class="form-group">
+	                        <div class="col-sm-offset-2 col-sm-10">
+								<button class="btn btn-secondary" type="button"
+									style="margin: 0px 10px 0 80px; width: 100px;" onclick="backFun()">뒤로 가기</button>
+								<button class="btn btn-danger" type="button" 
+	                            style="margin: 20px 0 0 20x;  width: 180px;" onclick="ajaxSend()">AJAX CHECK</button>
+	                        </div>
+	                    </div>
+	            </div>
+	        </div>
+	       <div class="card-footer small text-muted">Updated at 11:59 PM</div>
+	    </div>
+	</div>
+</html>
